@@ -27,5 +27,6 @@ npm install -g @apostrophecms/rename-mongodb-database
 
 ## Requirements
 
-**You must have `mongodump` and `mongorestore` installed.** Depending on how you installed MongoDB itself, this might not be automatic.
-See the MongoDB documentation for more information about the MongoDB command line tools.
+**You must have `mongosh` (or `mongo`) `mongodump` and `mongorestore` installed.** Depending on how you installed MongoDB itself, this might not be automatic.
+See the MongoDB documentation for more information about the MongoDB command line tools. MongoDB must be at
+least version 3.4.x, but keep in mind that 5.0 is the oldest release MongoDB officially supports.
