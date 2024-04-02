@@ -1,5 +1,6 @@
 # rename-mongodb-database
-<a href="https://apostrophecms.com/"><img src="https://raw.githubusercontent.com/apostrophecms/rename-mongodb-database/main/logos/logo-box-madefor.png" align="right" /></a>
+
+*A handy little utility from [apostrophecms](https://apostrophecms.com)*
 
 Rename a mongodb database with one command:
 
