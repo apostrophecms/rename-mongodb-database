@@ -88,5 +88,6 @@ function getMongoShellName() {
 
 function fail(s) {
   console.error(s);
+  console.error('\nUsage:\n\nrename-mongodb-database old-name new-name [--many] [--uri=mongodb://user:pass@somewhere.com]');
   process.exit(1);
 }
