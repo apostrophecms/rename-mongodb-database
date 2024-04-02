@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const quote = require('shell-quote/quote');
 const argv = require('boring')();
 const { execSync } = require('child_process');
@@ -82,4 +84,9 @@ function getMongoShellName() {
       fail('Cannot find mongosh or mongo, install the mongodb command line tools');
     }
   }
+}
+
+function fail(s) {
+  console.error(s);
+  process.exit(1);
 }
