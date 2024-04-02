@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+
+const quote = require('shell-quote/quote');
+const argv = require('boring')();
+const { execSync } = require('child_process');
+const many = !!argv.many;
+
+if (argv._.length !== 2) {
+  if (many) {
+    fail('Must specify oldprefix and newprefix');
+  } else {
+    fail('Must specify oldname and newname');
+  }
+}
+
+const from = argv._[0];
+const to = argv._[1];
+
+const uri = argv.uri;
+
+const shell = getMongoShellName();
+
+if (many) {
+  renameMany(from, to);
+} else {
+  renameOne(from, to);
+}
+
+function renameMany(from, to) {
+  const dbNames = exec(quote([ shell, '--quiet', '--eval=db.adminCommand( { listDatabases: 1, nameOnly: true }).databases.map(({ name }) => name).join(String.fromCharCode(10))' ])).split('\n').filter(name => name.startsWith(from) && (name.length > 0));
+  console.log(dbNames);
+  dbNames.forEach(name => {
+    const fromDb = name;
+    const toDb = name.replace(from, to);
+    renameOne(fromDb, toDb);
+  });
+}
+
+function renameOne(from, to) {
+  const cleanUri = getCleanUri(uri);
+  console.log(`Renaming ${from} to ${to}...`);
+  execInherit(quote([ 'mongodump', `--uri=${cleanUri}`, '-d', from, '--archive' ]) + ' | ' + quote([ 'mongorestore', `--uri=${cleanUri}`, `--nsInclude=${from}.*`, `--nsFrom=${from}.*`, `--nsTo=${to}.*`, '--archive', '--drop' ]));
+  execInherit(quote([ 'mongosh', getDbUri(uri, from), '--eval="db.dropDatabase()"' ]));
+  console.log('... Renamed');
+}
+
+function exec(cmd) {
+  if (argv.verbose) {
+    console.log(`> ${cmd}`);
+  }
+  return execSync(cmd, { encoding: 'utf8' });
+}
+
+function execInherit(cmd) {
+  if (argv.verbose) {
+    console.log(`> ${cmd}`);
+  }
+  return execSync(cmd, { stdio: 'inherit' });
+}
+
+function getCleanUri(uri, name) {
+  const url = new URL(uri || 'mongodb://localhost:27017/');
+  url.pathname = '/';
+  return url.toString();
+}
+
+function getDbUri(uri, name) {
+  const url = new URL(uri || 'mongodb://localhost:27017/');
+  url.pathname = `/${name}`;
+  return url.toString();
+}
+
+function getMongoShellName() {
+  try {
+    exec('mongosh --version');
+    return 'mongosh';
+  } catch (e) {
+    try {
+      exec('mongo --version');
+      return 'mongo';
+    } catch (e) {
+      fail('Cannot find mongosh or mongo, install the mongodb command line tools');
+    }
+  }
+}
