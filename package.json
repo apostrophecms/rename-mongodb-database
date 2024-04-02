@@ -1,0 +1,31 @@
+{
+  "name": "rename-mongodb-database",
+  "version": "1.0.0",
+  "description": "CLI tool to rename mongodb databases with one command",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo 'no tests yet'"
+  },
+  "bin": {
+    "rename-mongodb-database": "./bin/rename-mongodb-database"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apostrophecms/rename-mongodb-database.git"
+  },
+  "keywords": [
+    "mongodb",
+    "database",
+    "mongo"
+  ],
+  "author": "Apostrophe Technologies",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apostrophecms/rename-mongodb-database/issues"
+  },
+  "homepage": "https://github.com/apostrophecms/rename-mongodb-database#readme",
+  "dependencies": {
+    "boring": "^1.1.1",
+    "shell-quote": "^1.8.1"
+  }
+}
