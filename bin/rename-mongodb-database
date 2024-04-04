@@ -39,10 +39,11 @@ function renameMany(from, to) {
 }
 
 function renameOne(from, to) {
+  const fromUri = getDbUri(uri, from);
   const cleanUri = getCleanUri(uri);
   console.log(`Renaming ${from} to ${to}...`);
-  execInherit(quote([ 'mongodump', `--uri=${cleanUri}`, '-d', from, '--archive' ]) + ' | ' + quote([ 'mongorestore', `--uri=${cleanUri}`, `--nsInclude=${from}.*`, `--nsFrom=${from}.*`, `--nsTo=${to}.*`, '--archive', '--drop' ]));
-  execInherit(quote([ 'mongosh', getDbUri(uri, from), '--eval="db.dropDatabase()"' ]));
+  execInherit(quote([ 'mongodump', `--uri=${fromUri}`, '--archive' ]) + ' | ' + quote([ 'mongorestore', `--uri=${cleanUri}`, `--nsInclude=${from}.*`, `--nsFrom=${from}.*`, `--nsTo=${to}.*`, '--archive', '--drop' ]));
+  execInherit(quote([ shell, getDbUri(uri, from), '--eval="db.dropDatabase()"' ]));
   console.log('... Renamed');
 }
 

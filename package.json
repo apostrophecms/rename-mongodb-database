@@ -1,6 +1,6 @@
 {
   "name": "@apostrophecms/rename-mongodb-database",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool to rename mongodb databases with one command",
   "main": "app.js",
   "scripts": {
